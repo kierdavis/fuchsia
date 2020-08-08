@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- RecyclerView view types -->
+    <item type="id" name="existing_picture_view_type"/>
+    <item type="id" name="new_picture_view_type"/>
+</resources>

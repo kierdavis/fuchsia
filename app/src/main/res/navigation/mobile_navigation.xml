@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_items">
+
+    <fragment
+        android:id="@+id/navigation_items"
+        android:name="com.kierdavis.fuchsia.ui.ItemsFragment"
+        android:label="@string/title_items"
+        tools:layout="@layout/items" >
+        <action
+            android:id="@+id/action_items_to_edit_item"
+            app:destination="@id/navigation_edit_item" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_edit_item"
+        android:name="com.kierdavis.fuchsia.ui.EditItemFragment"
+        android:label="@string/title_edit_item"
+        tools:layout="@layout/edit_item" >
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_collections"
+        android:name="com.kierdavis.fuchsia.ui.CollectionsFragment"
+        android:label="@string/title_collections"
+        tools:layout="@layout/collections" />
+
+</navigation>
