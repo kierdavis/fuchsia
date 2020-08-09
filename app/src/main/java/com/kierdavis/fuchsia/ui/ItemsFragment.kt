@@ -43,6 +43,7 @@ class ItemsFragment : Fragment(), ItemCardClickListener {
         }
     }
 
+    // TODO rename
     private fun onNewItemClick() {
         viewModel.createItem().observe(this) { item ->
             findNavController().navigate(ItemsFragmentDirections.actionItemsToEditItem(item.id))

@@ -28,6 +28,19 @@
         android:id="@+id/navigation_collections"
         android:name="com.kierdavis.fuchsia.ui.CollectionsFragment"
         android:label="@string/title_collections"
-        tools:layout="@layout/collections" />
+        tools:layout="@layout/collections" >
+        <action
+            android:id="@+id/action_collections_to_edit_collection"
+            app:destination="@id/navigation_edit_collection" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_edit_collection"
+        android:name="com.kierdavis.fuchsia.ui.EditCollectionFragment"
+        android:label="@string/title_edit_collection"
+        tools:layout="@layout/edit_collection">
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

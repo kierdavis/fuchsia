@@ -3,4 +3,5 @@
     <string name="title_items">Items</string>
     <string name="title_edit_item">Edit Item</string>
     <string name="title_collections">Collections</string>
+    <string name="title_edit_collection">Edit Collection</string>
 </resources>
