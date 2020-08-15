@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.databinding.ItemsBinding
 import com.kierdavis.fuchsia.ui.component.ItemCardComponent
+import com.kierdavis.fuchsia.ui.component.ItemCardsComponent
 
 class ItemsFragment : Fragment(), ItemCardComponent.ClickListener {
     private val viewModel by viewModels<ItemsViewModel> {
         ItemsViewModel.Factory(requireContext())
     }
+
+    private lateinit var itemCards: ItemCardsComponent
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,14 +32,11 @@ class ItemsFragment : Fragment(), ItemCardComponent.ClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        itemCards = ItemCardsComponent(requireContext(), viewLifecycleOwner, this)
+        viewModel.itemIds.observe(viewLifecycleOwner) { itemCards.itemIds = it }
         ItemsBinding.bind(view).let { dataBinding ->
             dataBinding.lifecycleOwner = this
-            ItemCardRecyclerViewAdapter(viewLifecycleOwner, this).let { recyclerViewAdapter ->
-                viewModel.itemIds.observe(viewLifecycleOwner, recyclerViewAdapter)
-                dataBinding.itemsCards.adapter = recyclerViewAdapter
-                dataBinding.itemsCards.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                dataBinding.itemsCards.addItemDecoration(PaddingDecoration(10))
-            }
+            dataBinding.itemsCards.addView(itemCards.view)
             dataBinding.itemsAddButton.setOnClickListener {
                 onNewItemClicked()
             }

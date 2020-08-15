@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+        <FrameLayout
             android:id="@+id/items_cards"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
