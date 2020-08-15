@@ -26,14 +26,12 @@ class ItemCardComponent(context: Context, private val lifecycleOwner: LifecycleO
     }
 
     // Data
-    private var realItemId: Long = 0L
     private var boundObservable: LiveData<ItemPicture?>? = null
-    var itemId
-        get() = realItemId
+    var itemId: Long = 0L
         set(newItemId) {
             boundObservable?.removeObserver(this)
-            realItemId = newItemId
-            boundObservable = AppDatabase.getInstance(context).itemPictureDao().firstForItem(itemId).apply {
+            field = newItemId
+            boundObservable = AppDatabase.getInstance(context).itemPictureDao().firstForItem(newItemId).apply {
                 observe(lifecycleOwner, this@ItemCardComponent)
             }
         }
