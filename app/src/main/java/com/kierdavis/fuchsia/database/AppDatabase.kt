@@ -11,8 +11,9 @@ import com.kierdavis.fuchsia.model.Item
 import com.kierdavis.fuchsia.model.ItemPicture
 import com.kierdavis.fuchsia.database.converters.UriConverters
 import com.kierdavis.fuchsia.model.Collection
+import com.kierdavis.fuchsia.model.CollectionItem
 
-@Database(entities = [Item::class, ItemPicture::class, Collection::class], version = 2)
+@Database(entities = [Item::class, ItemPicture::class, Collection::class, CollectionItem::class], version = 3, exportSchema = false)
 @TypeConverters(UriConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
@@ -23,12 +24,18 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var theInstance: AppDatabase? = null
 
+        // TODO split this down a bit
         fun getInstance(context: Context): AppDatabase {
             return theInstance ?: synchronized(this) {
                 Room.databaseBuilder(context, AppDatabase::class.java, "fuchsia").addMigrations(
                     object : Migration(1, 2) {
                         override fun migrate(database: SupportSQLiteDatabase) {
-                            database.execSQL("CREATE TABLE `Collection` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`))")
+                            database.execSQL("CREATE TABLE Collection (id INTEGER NOT NULL, name TEXT NOT NULL, PRIMARY KEY(id))")
+                        }
+                    },
+                    object : Migration(2, 3) {
+                        override fun migrate(database: SupportSQLiteDatabase) {
+                            database.execSQL("CREATE TABLE CollectionItem (collectionId INTEGER NOT NULL, itemId INTEGER NOT NULL, PRIMARY KEY(collectionId, itemId))")
                         }
                     }
                 ).build().also {

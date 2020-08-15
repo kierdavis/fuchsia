@@ -29,4 +29,7 @@ abstract class ItemDao {
 
     @Query("SELECT * FROM Item WHERE id = :id")
     abstract suspend fun byId(id: Long): Item
+
+    @Query("SELECT * FROM Item WHERE id IN (SELECT itemId FROM CollectionItem WHERE collectionId = :collectionId)")
+    abstract fun inCollection(collectionId: Long): LiveData<List<Item>>
 }

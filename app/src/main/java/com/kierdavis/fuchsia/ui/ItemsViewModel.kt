@@ -8,17 +8,8 @@ import com.kierdavis.fuchsia.database.AppDatabase
 import kotlinx.coroutines.launch
 
 class ItemsViewModel(private val context: Context) : ViewModel() {
-    val items: LiveData<List<Item>> = AppDatabase.getInstance(context).itemDao().all()
-
-    val itemsWithPictures: LiveData<List<ItemWithPictures>> = AppDatabase.getInstance(context).let { db ->
-        Transformations.map(items) { items ->
-            items.map { item ->
-                ItemWithPictures(
-                    item,
-                    db.itemPictureDao().allForItem(item.id)
-                )
-            }
-        }
+    val itemsWithPictures: LiveData<List<ItemWithPictures>> = AppDatabase.getInstance(context).run {
+        itemPictureDao().augmentItems(itemDao().all())
     }
 
     fun createItem(): LiveData<Item> {

@@ -6,11 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.databinding.EditCollectionBinding
+import com.kierdavis.fuchsia.model.ItemWithPictures
 
-class EditCollectionFragment : Fragment() {
+class EditCollectionFragment : Fragment(), ItemCardClickListener {
     private val args: EditCollectionFragmentArgs by navArgs()
 
     private val viewModel by viewModels<EditCollectionViewModel> {
@@ -36,10 +40,25 @@ class EditCollectionFragment : Fragment() {
                     onFieldChanged()
                 }
             }
+            ItemCardRecyclerViewAdapter(this).let { recyclerViewAdapter ->
+                viewModel.itemsWithPictures.observe(viewLifecycleOwner, recyclerViewAdapter)
+                dataBinding.editCollectionItems.adapter = recyclerViewAdapter
+                dataBinding.editCollectionItems.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                dataBinding.editCollectionItems.addItemDecoration(PaddingDecoration(10))
+            }
+            dataBinding.editCollectionAddItemButton.setOnClickListener { onAddItemClicked() }
         }
     }
 
     private fun onFieldChanged() {
         viewModel.save()
+    }
+
+    private fun onAddItemClicked() {
+        Snackbar.make(requireView(), "onAddItemClicked", Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onItemCardClicked(itemWithPictures: ItemWithPictures) {
+        findNavController().navigate(EditCollectionFragmentDirections.actionEditCollectionToEditItem(itemWithPictures.item.id))
     }
 }
