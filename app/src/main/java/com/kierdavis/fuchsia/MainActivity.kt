@@ -18,18 +18,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity)
+        setContentView(R.layout.main)
         setupNavigation()
     }
 
     private fun setupNavigation() {
-        findNavController(R.id.nav_host_fragment).let { navController ->
+        findNavController(R.id.main_nav_host).let { navController ->
             setupActionBarWithNavController(navController, appBarConfiguration)
-            findViewById<BottomNavigationView>(R.id.nav_view).setupWithNavController(navController)
+            findViewById<BottomNavigationView>(R.id.main_tabs).setupWithNavController(navController)
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return findNavController(R.id.nav_host_fragment).navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        return findNavController(R.id.main_nav_host).navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
