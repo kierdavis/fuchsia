@@ -34,9 +34,9 @@ object PictureCapture {
     }
 
     fun finish(activity: Activity): Uri? {
-        val uriString = activity.getPreferences(Context.MODE_PRIVATE).let { preferences ->
-            val uriString = preferences.getString(PREFERENCE_KEY, null)
-            preferences.edit().remove(PREFERENCE_KEY).apply()
+        val uriString = activity.getPreferences(Context.MODE_PRIVATE).run {
+            val uriString = getString(PREFERENCE_KEY, null)
+            edit().remove(PREFERENCE_KEY).apply()
             uriString
         } ?: return null
         val uri = Uri.parse(uriString) ?: return null
@@ -48,7 +48,6 @@ object PictureCapture {
         }
         return uri
     }
-
 
     private const val PREFERENCE_KEY = "picture_capture_uri"
 
