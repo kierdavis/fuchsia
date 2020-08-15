@@ -1,12 +1,12 @@
 package com.kierdavis.fuchsia.ui
 
 import android.view.View
-import com.kierdavis.fuchsia.databinding.NewPictureBinding
+import com.kierdavis.fuchsia.databinding.NewPictureCardBinding
 
 class NewPictureCardViewHolder(view: View, listener: NewPictureClickListener) : PictureCardViewHolder(view) {
-    private val dataBinding: NewPictureBinding = NewPictureBinding.bind(view)
-
     init {
-        dataBinding.newPictureCard.setOnClickListener { listener.onNewPictureClicked() }
+        NewPictureCardBinding.bind(view).apply {
+            newPictureCard.setOnClickListener { listener.onNewPictureClicked() }
+        }
     }
 }

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.kierdavis.fuchsia.R
-import com.kierdavis.fuchsia.model.ItemPicture
 
 class PictureCardRecyclerViewAdapter(private val newPictureClickListener: NewPictureClickListener) : RecyclerView.Adapter<PictureCardViewHolder>(),
     Observer<List<Uri>> {
@@ -37,10 +36,10 @@ class PictureCardRecyclerViewAdapter(private val newPictureClickListener: NewPic
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             R.id.existing_picture_view_type -> {
-                ExistingPictureCardViewHolder(inflater.inflate(R.layout.existing_picture, parent, false))
+                ExistingPictureCardViewHolder(inflater.inflate(R.layout.existing_picture_card, parent, false))
             }
             R.id.new_picture_view_type -> {
-                NewPictureCardViewHolder(inflater.inflate(R.layout.new_picture, parent, false), newPictureClickListener)
+                NewPictureCardViewHolder(inflater.inflate(R.layout.new_picture_card, parent, false), newPictureClickListener)
             }
             else -> {
                 throw RuntimeException("bad viewType")
