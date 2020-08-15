@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.kierdavis.fuchsia">
 
+    <!-- TODO allow usage on devices without a camera -->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,8 +22,5 @@
             </intent-filter>
         </activity>
     </application>
-
-    <!-- TODO allow usage on devices without a camera -->
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
 
 </manifest>
