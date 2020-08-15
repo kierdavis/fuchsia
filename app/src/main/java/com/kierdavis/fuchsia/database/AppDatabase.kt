@@ -24,24 +24,24 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var theInstance: AppDatabase? = null
 
-        // TODO split this down a bit
         fun getInstance(context: Context): AppDatabase {
             return theInstance ?: synchronized(this) {
-                Room.databaseBuilder(context, AppDatabase::class.java, "fuchsia").addMigrations(
-                    object : Migration(1, 2) {
-                        override fun migrate(database: SupportSQLiteDatabase) {
-                            database.execSQL("CREATE TABLE Collection (id INTEGER NOT NULL, name TEXT NOT NULL, PRIMARY KEY(id))")
-                        }
-                    },
-                    object : Migration(2, 3) {
-                        override fun migrate(database: SupportSQLiteDatabase) {
-                            database.execSQL("CREATE TABLE CollectionItem (collectionId INTEGER NOT NULL, itemId INTEGER NOT NULL, PRIMARY KEY(collectionId, itemId))")
-                        }
-                    }
-                ).build().also {
-                    theInstance = it
-                }
+                newInstance(context).also { theInstance = it }
             }
         }
+
+        private fun newInstance(context: Context): AppDatabase =
+            Room.databaseBuilder(context, AppDatabase::class.java, "fuchsia").addMigrations(
+                object : Migration(1, 2) {
+                    override fun migrate(database: SupportSQLiteDatabase) {
+                        database.execSQL("CREATE TABLE Collection (id INTEGER NOT NULL, name TEXT NOT NULL, PRIMARY KEY(id))")
+                    }
+                },
+                object : Migration(2, 3) {
+                    override fun migrate(database: SupportSQLiteDatabase) {
+                        database.execSQL("CREATE TABLE CollectionItem (collectionId INTEGER NOT NULL, itemId INTEGER NOT NULL, PRIMARY KEY(collectionId, itemId))")
+                    }
+                }
+            ).build()
     }
 }
