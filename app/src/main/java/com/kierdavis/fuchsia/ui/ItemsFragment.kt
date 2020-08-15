@@ -11,9 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.databinding.ItemsBinding
-import com.kierdavis.fuchsia.model.ItemWithPictures
+import com.kierdavis.fuchsia.ui.component.ItemCardComponent
 
-class ItemsFragment : Fragment(), ItemCardClickListener {
+class ItemsFragment : Fragment(), ItemCardComponent.ClickListener {
     private val viewModel by viewModels<ItemsViewModel> {
         ItemsViewModel.Factory(requireContext())
     }
@@ -31,8 +31,8 @@ class ItemsFragment : Fragment(), ItemCardClickListener {
         super.onViewCreated(view, savedInstanceState)
         ItemsBinding.bind(view).let { dataBinding ->
             dataBinding.lifecycleOwner = this
-            ItemCardRecyclerViewAdapter(this).let { recyclerViewAdapter ->
-                viewModel.itemsWithPictures.observe(viewLifecycleOwner, recyclerViewAdapter)
+            ItemCardRecyclerViewAdapter(viewLifecycleOwner, this).let { recyclerViewAdapter ->
+                viewModel.itemIds.observe(viewLifecycleOwner, recyclerViewAdapter)
                 dataBinding.itemsCards.adapter = recyclerViewAdapter
                 dataBinding.itemsCards.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                 dataBinding.itemsCards.addItemDecoration(PaddingDecoration(10))
@@ -49,7 +49,7 @@ class ItemsFragment : Fragment(), ItemCardClickListener {
         }
     }
 
-    override fun onItemCardClicked(itemWithPictures: ItemWithPictures) {
-        findNavController().navigate(ItemsFragmentDirections.actionItemsToEditItem(itemWithPictures.item.id))
+    override fun onItemCardClicked(itemId: Long) {
+        findNavController().navigate(ItemsFragmentDirections.actionItemsToEditItem(itemId))
     }
 }

@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.databinding.EditCollectionBinding
-import com.kierdavis.fuchsia.model.ItemWithPictures
+import com.kierdavis.fuchsia.ui.component.ItemCardComponent
 
-class EditCollectionFragment : Fragment(), ItemCardClickListener {
+class EditCollectionFragment : Fragment(), ItemCardComponent.ClickListener {
     private val args: EditCollectionFragmentArgs by navArgs()
 
     private val viewModel by viewModels<EditCollectionViewModel> {
@@ -40,8 +40,8 @@ class EditCollectionFragment : Fragment(), ItemCardClickListener {
                     onFieldChanged()
                 }
             }
-            ItemCardRecyclerViewAdapter(this).let { recyclerViewAdapter ->
-                viewModel.itemsWithPictures.observe(viewLifecycleOwner, recyclerViewAdapter)
+            ItemCardRecyclerViewAdapter(viewLifecycleOwner, this).let { recyclerViewAdapter ->
+                viewModel.itemIds.observe(viewLifecycleOwner, recyclerViewAdapter)
                 dataBinding.editCollectionItems.adapter = recyclerViewAdapter
                 dataBinding.editCollectionItems.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
                 dataBinding.editCollectionItems.addItemDecoration(PaddingDecoration(10))
@@ -58,7 +58,7 @@ class EditCollectionFragment : Fragment(), ItemCardClickListener {
         Snackbar.make(requireView(), "onAddItemClicked", Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun onItemCardClicked(itemWithPictures: ItemWithPictures) {
-        findNavController().navigate(EditCollectionFragmentDirections.actionEditCollectionToEditItem(itemWithPictures.item.id))
+    override fun onItemCardClicked(itemId: Long) {
+        findNavController().navigate(EditCollectionFragmentDirections.actionEditCollectionToEditItem(itemId))
     }
 }

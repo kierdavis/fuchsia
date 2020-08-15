@@ -36,4 +36,7 @@ abstract class ItemPictureDao {
                 ItemWithPictures(item, allForItem(item.id))
             }
         }
+
+    @Query("SELECT * FROM ItemPicture WHERE itemId = :itemId ORDER BY id LIMIT 1")
+    abstract fun firstForItem(itemId: Long): LiveData<ItemPicture?>
 }

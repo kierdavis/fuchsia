@@ -19,8 +19,8 @@ class EditCollectionViewModel(private val context: Context, private val collecti
         }
     }
 
-    val itemsWithPictures: LiveData<List<ItemWithPictures>> = AppDatabase.getInstance(context).run {
-        itemPictureDao().augmentItems(itemDao().inCollection(collectionId))
+    val itemIds: LiveData<List<Long>> = AppDatabase.getInstance(context).run {
+        itemDao().idsInCollection(collectionId)
     }
 
     fun save() {

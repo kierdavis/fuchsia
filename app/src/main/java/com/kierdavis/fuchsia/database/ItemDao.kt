@@ -24,11 +24,17 @@ abstract class ItemDao {
         }
     }
 
+    @Query("SELECT id FROM Item")
+    abstract fun allIds(): LiveData<List<Long>>
+
     @Query("SELECT * FROM Item")
     abstract fun all(): LiveData<List<Item>>
 
     @Query("SELECT * FROM Item WHERE id = :id")
     abstract suspend fun byId(id: Long): Item
+
+    @Query("SELECT itemId FROM CollectionItem WHERE collectionId = :collectionId")
+    abstract fun idsInCollection(collectionId: Long): LiveData<List<Long>>
 
     @Query("SELECT * FROM Item WHERE id IN (SELECT itemId FROM CollectionItem WHERE collectionId = :collectionId)")
     abstract fun inCollection(collectionId: Long): LiveData<List<Item>>
