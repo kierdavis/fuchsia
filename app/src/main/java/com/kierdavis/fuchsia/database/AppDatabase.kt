@@ -13,7 +13,7 @@ import com.kierdavis.fuchsia.database.converters.UriConverters
 import com.kierdavis.fuchsia.model.Collection
 import com.kierdavis.fuchsia.model.CollectionItem
 
-@Database(entities = [Item::class, ItemPicture::class, Collection::class, CollectionItem::class], version = 3, exportSchema = false)
+@Database(entities = [Item::class, ItemPicture::class, Collection::class, CollectionItem::class], version = 3)
 @TypeConverters(UriConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
