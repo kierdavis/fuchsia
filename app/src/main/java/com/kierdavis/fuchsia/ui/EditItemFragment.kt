@@ -69,6 +69,7 @@ class EditItemFragment : Fragment(), NewPictureClickListener {
     }
 
     override fun onNewPictureClicked() {
+        // TODO support importing existing photo from media library
         PictureCapture.launch(
             requireActivity(),
             viewModel.item.value?.name ?: "untitled-item",
