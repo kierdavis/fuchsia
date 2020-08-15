@@ -34,12 +34,12 @@ abstract class AppDatabase : RoomDatabase() {
             Room.databaseBuilder(context, AppDatabase::class.java, "fuchsia").addMigrations(
                 object : Migration(1, 2) {
                     override fun migrate(database: SupportSQLiteDatabase) {
-                        database.execSQL("CREATE TABLE Collection (id INTEGER NOT NULL, name TEXT NOT NULL, PRIMARY KEY(id))")
+                        database.execSQL("CREATE TABLE IF NOT EXISTS `Collection` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)")
                     }
                 },
                 object : Migration(2, 3) {
                     override fun migrate(database: SupportSQLiteDatabase) {
-                        database.execSQL("CREATE TABLE CollectionItem (collectionId INTEGER NOT NULL, itemId INTEGER NOT NULL, PRIMARY KEY(collectionId, itemId))")
+                        database.execSQL("CREATE TABLE IF NOT EXISTS `CollectionItem` (`collectionId` INTEGER NOT NULL, `itemId` INTEGER NOT NULL, PRIMARY KEY(`collectionId`, `itemId`))")
                     }
                 }
             ).build()
