@@ -22,5 +22,4 @@
     </androidx.cardview.widget.CardView>
 </layout>
 
-<!-- TODO rename item.xml to item_card.xml -->
 <!-- TODO put Item into the data binding -->

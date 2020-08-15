@@ -21,7 +21,7 @@ class ItemCardRecyclerViewAdapter(private val clickListener: ItemCardClickListen
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemCardViewHolder {
-        return ItemCardViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false), clickListener)
+        return ItemCardViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_card, parent, false), clickListener)
     }
 
     override fun onBindViewHolder(holder: ItemCardViewHolder, position: Int) {
