@@ -7,6 +7,6 @@ class NewPictureCardViewHolder(view: View, listener: NewPictureClickListener) : 
     private val dataBinding: NewPictureBinding = NewPictureBinding.bind(view)
 
     init {
-        dataBinding.newPictureCard.setOnClickListener { listener.onNewPictureClick() }
+        dataBinding.newPictureCard.setOnClickListener { listener.onNewPictureClicked() }
     }
 }

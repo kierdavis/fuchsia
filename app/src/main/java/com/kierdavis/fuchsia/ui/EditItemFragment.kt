@@ -68,7 +68,7 @@ class EditItemFragment : Fragment(), NewPictureClickListener {
         viewModel.save()
     }
 
-    override fun onNewPictureClick() {
+    override fun onNewPictureClicked() {
         PictureCapture.launch(
             requireActivity(),
             viewModel.item.value?.name ?: "untitled-item",

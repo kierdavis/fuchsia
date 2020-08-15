@@ -4,5 +4,5 @@ import com.kierdavis.fuchsia.model.ItemWithPictures
 
 interface ItemCardClickListener {
     // TODO rename
-    fun onItemCardClick(itemWithPictures: ItemWithPictures)
+    fun onItemCardClicked(itemWithPictures: ItemWithPictures)
 }

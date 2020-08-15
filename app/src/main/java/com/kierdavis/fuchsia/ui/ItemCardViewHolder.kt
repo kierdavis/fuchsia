@@ -16,7 +16,7 @@ class ItemCardViewHolder(val view: View, private val listener: ItemCardClickList
 
     fun bind(itemWithPictures: ItemWithPictures) {
         currentItemWithPictures?.pictures?.removeObserver(this)
-        dataBinding.itemCard.setOnClickListener { listener.onItemCardClick(itemWithPictures) }
+        dataBinding.itemCard.setOnClickListener { listener.onItemCardClicked(itemWithPictures) }
         dataBinding.itemCardImage.setImageDrawable(null)
         itemWithPictures.pictures.observeForever(this)
         currentItemWithPictures = itemWithPictures

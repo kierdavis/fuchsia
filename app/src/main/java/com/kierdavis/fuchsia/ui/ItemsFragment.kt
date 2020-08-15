@@ -38,19 +38,18 @@ class ItemsFragment : Fragment(), ItemCardClickListener {
                 dataBinding.itemsCards.addItemDecoration(PaddingDecoration(10))
             }
             dataBinding.itemsAddButton.setOnClickListener {
-                onNewItemClick()
+                onNewItemClicked()
             }
         }
     }
 
-    // TODO rename
-    private fun onNewItemClick() {
+    private fun onNewItemClicked() {
         viewModel.createItem().observe(this) { item ->
             findNavController().navigate(ItemsFragmentDirections.actionItemsToEditItem(item.id))
         }
     }
 
-    override fun onItemCardClick(itemWithPictures: ItemWithPictures) {
+    override fun onItemCardClicked(itemWithPictures: ItemWithPictures) {
         findNavController().navigate(ItemsFragmentDirections.actionItemsToEditItem(itemWithPictures.item.id))
     }
 }
