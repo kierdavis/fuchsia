@@ -58,7 +58,7 @@ class EditCollectionFragment : Fragment(), ItemCardComponent.ClickListener {
         Snackbar.make(requireView(), "onAddItemClicked", Snackbar.LENGTH_SHORT).show()
     }
 
-    override fun onItemCardClicked(itemId: Long) {
-        findNavController().navigate(EditCollectionFragmentDirections.actionEditCollectionToEditItem(itemId))
+    override fun onItemCardClicked(id: Long) {
+        findNavController().navigate(EditCollectionFragmentDirections.actionEditCollectionToEditItem(id))
     }
 }

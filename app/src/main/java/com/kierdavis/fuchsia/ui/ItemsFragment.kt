@@ -49,7 +49,7 @@ class ItemsFragment : Fragment(), ItemCardComponent.ClickListener {
         }
     }
 
-    override fun onItemCardClicked(itemId: Long) {
-        findNavController().navigate(ItemsFragmentDirections.actionItemsToEditItem(itemId))
+    override fun onItemCardClicked(id: Long) {
+        findNavController().navigate(ItemsFragmentDirections.actionItemsToEditItem(id))
     }
 }
