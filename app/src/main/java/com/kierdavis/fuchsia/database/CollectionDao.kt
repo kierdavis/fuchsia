@@ -10,23 +10,14 @@ import com.kierdavis.fuchsia.model.Collection
 @Dao
 abstract class CollectionDao {
     @Insert
-    protected abstract suspend fun insert(collection: Collection): Long
+    abstract suspend fun insert(collection: Collection): Long
 
     @Update
-    protected abstract suspend fun update(collection: Collection)
-
-    suspend fun save(collection: Collection) {
-        if (collection.hasId()) {
-            update(collection)
-        }
-        else {
-            collection.id = insert(collection)
-        }
-    }
+    abstract suspend fun update(collection: Collection)
 
     @Query("SELECT * FROM Collection")
     abstract fun all(): LiveData<List<Collection>>
 
-    @Query("SELECT * FROM Collection WHERE id = :id")
-    abstract suspend fun byId(id: Long): Collection
+    @Query("SELECT * FROM Collection WHERE id = :id LIMIT 1")
+    abstract fun byId(id: Long): LiveData<Collection>
 }

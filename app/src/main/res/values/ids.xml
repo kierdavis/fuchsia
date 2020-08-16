@@ -3,4 +3,6 @@
     <!-- RecyclerView view types -->
     <item type="id" name="existing_picture_view_type"/>
     <item type="id" name="new_picture_view_type"/>
+
+    <item type="id" name="collection_editor_core_component_name_view"/>
 </resources>

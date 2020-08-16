@@ -7,13 +7,20 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.kierdavis.fuchsia.RetargetableObserver
 import com.kierdavis.fuchsia.model.ItemPicture
 
 class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner) : Component(context, lifecycleOwner) {
     constructor(parent: Component) : this(parent.context, parent.lifecycleOwner)
+
+    // Properties
+    var itemId: Long = 0L
+        set(newItemId) {
+            field = newItemId
+            pictureObserver.observedData = database.itemPictureDao().firstForItem(newItemId)
+        }
+    var onCardClickedListener: OnClickedListener? = null
 
     // View
     private val imageView = ImageView(context).apply {
@@ -23,34 +30,23 @@ class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner) : Comp
         radius = 15F
         cardElevation = 3F
         addView(imageView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        setOnClickListener { onCardClickedListener?.onItemCardClicked(itemId) }
     }
     override val view
         get() = cardView
 
-    // Data logic
-    private val pictureObserver = Observer<ItemPicture?> { picture ->
-        picture?.mediaUri?.let { pictureDrawableCache.get(it) }.let { imageView.setImageDrawable(it) }
-    }
-    private var pictureObservable: LiveData<ItemPicture?>? = null
-    var itemId: Long = 0L
-        set(newItemId) {
-            pictureObservable?.removeObserver(pictureObserver)
-            field = newItemId
-            pictureObservable = database.itemPictureDao().firstForItem(newItemId).apply {
-                observe(lifecycleOwner, pictureObserver)
-            }
+    // Glue
+    private val pictureObserver = object : RetargetableObserver<ItemPicture?>(lifecycleOwner) {
+        override fun onChanged(picture: ItemPicture?) {
+            picture?.mediaUri?.let { pictureDrawableCache.get(it) }.let { imageView.setImageDrawable(it) }
         }
-
-    // Interaction
-    fun setOnClickListener(listener: ClickListener) {
-        cardView.setOnClickListener { listener.onItemCardClicked(itemId) }
     }
 
 
     class ViewHolder(val component: ItemCardComponent) : RecyclerView.ViewHolder(component.view)
 
 
-    interface ClickListener {
+    interface OnClickedListener {
         fun onItemCardClicked(id: Long)
     }
 }

@@ -13,7 +13,7 @@ class CollectionsViewModel(private val context: Context) : ViewModel() {
         val liveCollection = MutableLiveData<Collection>()
         viewModelScope.launch {
             val collection = Collection()
-            AppDatabase.getInstance(context).collectionDao().save(collection)
+            AppDatabase.getInstance(context).collectionDao().insert(collection)
             liveCollection.postValue(collection)
         }
         return liveCollection
