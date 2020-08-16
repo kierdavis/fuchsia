@@ -29,7 +29,7 @@ class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner) : Comp
 
     // Data logic
     private val pictureObserver = Observer<ItemPicture?> { picture ->
-        picture?.let { pictureDrawableCache.get(it.mediaUri) }.let { imageView.setImageDrawable(it) }
+        picture?.mediaUri?.let { pictureDrawableCache.get(it) }.let { imageView.setImageDrawable(it) }
     }
     private var pictureObservable: LiveData<ItemPicture?>? = null
     var itemId: Long = 0L
