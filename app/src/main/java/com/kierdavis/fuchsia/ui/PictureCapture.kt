@@ -1,10 +1,8 @@
-package com.kierdavis.fuchsia
+package com.kierdavis.fuchsia.ui
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Environment

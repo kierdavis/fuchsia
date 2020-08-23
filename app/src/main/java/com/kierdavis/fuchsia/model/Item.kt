@@ -4,12 +4,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class Item {
+data class Item(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L
-    var name: String = ""
-
-    fun hasId(): Boolean {
-        return id != 0L
-    }
-}
+    val id: Long = 0L,
+    val name: String = ""
+)

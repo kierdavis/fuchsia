@@ -5,14 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class ItemPicture(
-    var itemId: Long,
-    var mediaUri: Uri
-) {
+data class ItemPicture(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L
-
-    fun hasId(): Boolean {
-        return id != 0L
-    }
-}
+    var id: Long = 0L,
+    val itemId: Long,
+    val mediaUri: Uri
+)

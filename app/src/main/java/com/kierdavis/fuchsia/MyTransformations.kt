@@ -3,7 +3,7 @@ package com.kierdavis.fuchsia
 import androidx.lifecycle.*
 
 object MyTransformations {
-    fun <T> fold(lifecycleOwner: LifecycleOwner, sources: LiveData<LiveData<T>>): LiveData<T> {
+    fun <T> flatten(lifecycleOwner: LifecycleOwner, sources: LiveData<LiveData<T>>): LiveData<T> {
         val dest = MutableLiveData<T>()
         val valueObserver = Observer<T> { dest.value = it }
         sources.observe(lifecycleOwner, Folder(lifecycleOwner, valueObserver))

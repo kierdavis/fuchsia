@@ -7,18 +7,16 @@
 
     <fragment
         android:id="@+id/navigation_items"
-        android:name="com.kierdavis.fuchsia.ui.ItemsFragment"
-        android:label="@string/title_items"
-        tools:layout="@layout/items" >
+        android:name="com.kierdavis.fuchsia.ui.fragment.ItemsFragment"
+        android:label="@string/title_items" >
         <action
             android:id="@+id/action_items_to_edit_item"
             app:destination="@id/navigation_edit_item" />
     </fragment>
     <fragment
         android:id="@+id/navigation_edit_item"
-        android:name="com.kierdavis.fuchsia.ui.EditItemFragment"
-        android:label="@string/title_edit_item"
-        tools:layout="@layout/edit_item" >
+        android:name="com.kierdavis.fuchsia.ui.fragment.EditItemFragment"
+        android:label="@string/title_edit_item" >
         <argument
             android:name="id"
             app:argType="long" />
@@ -26,9 +24,8 @@
 
     <fragment
         android:id="@+id/navigation_collections"
-        android:name="com.kierdavis.fuchsia.ui.CollectionsFragment"
-        android:label="@string/title_collections"
-        tools:layout="@layout/collections" >
+        android:name="com.kierdavis.fuchsia.ui.fragment.CollectionsFragment"
+        android:label="@string/title_collections" >
         <action
             android:id="@+id/action_collections_to_edit_collection"
             app:destination="@id/navigation_edit_collection" />
@@ -36,8 +33,7 @@
     <fragment
         android:id="@+id/navigation_edit_collection"
         android:name="com.kierdavis.fuchsia.ui.fragment.EditCollectionFragment"
-        android:label="@string/title_edit_collection"
-        tools:layout="@layout/edit_collection">
+        android:label="@string/title_edit_collection" >
         <argument
             android:name="id"
             app:argType="long" />

@@ -1,30 +1,33 @@
 package com.kierdavis.fuchsia.ui.component
 
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleOwner
-import androidx.recyclerview.widget.RecyclerView
-import com.kierdavis.fuchsia.RetargetableObserver
-import com.kierdavis.fuchsia.model.ItemPicture
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.observe
+import com.kierdavis.fuchsia.MyTransformations
 
-class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner) : Component(context, lifecycleOwner) {
-    constructor(parent: Component) : this(parent.context, parent.lifecycleOwner)
+class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner, val liveItemId: LiveData<Long>) : Component(context, lifecycleOwner) {
+    // Data
+    val liveFirstPicture = MyTransformations.flatten(lifecycleOwner, Transformations.map(liveItemId) { database.itemPictureDao().firstForItem(it) })
+    val itemId
+        get() = liveItemId.value ?: 0L
 
     // Properties
-    var itemId: Long = 0L
-        set(newItemId) {
-            field = newItemId
-            pictureObserver.observedData = database.itemPictureDao().firstForItem(newItemId)
-        }
     var onCardClickedListener: OnClickedListener? = null
 
     // View
     private val imageView = ImageView(context).apply {
         adjustViewBounds = true
+        liveFirstPicture.observe(lifecycleOwner) { firstPicture ->
+            setImageDrawable(firstPicture?.let { drawableCache.get(it.mediaUri) })
+        }
     }
     private val cardView = CardView(context).apply {
         radius = 15F
@@ -32,18 +35,8 @@ class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner) : Comp
         addView(imageView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         setOnClickListener { onCardClickedListener?.onItemCardClicked(itemId) }
     }
-    override val view
+    override val view: View
         get() = cardView
-
-    // Glue
-    private val pictureObserver = object : RetargetableObserver<ItemPicture?>(lifecycleOwner) {
-        override fun onChanged(picture: ItemPicture?) {
-            picture?.mediaUri?.let { pictureDrawableCache.get(it) }.let { imageView.setImageDrawable(it) }
-        }
-    }
-
-
-    class ViewHolder(val component: ItemCardComponent) : RecyclerView.ViewHolder(component.view)
 
 
     interface OnClickedListener {

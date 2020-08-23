@@ -10,29 +10,30 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager.VERTICAL
+import com.kierdavis.fuchsia.model.Collection
 import com.kierdavis.fuchsia.ui.PaddingDecoration
 
-class ItemCardsComponent(context: Context, lifecycleOwner: LifecycleOwner, val liveItemIds: LiveData<List<Long>>) : Component(context, lifecycleOwner) {
+class CollectionCardsComponent(context: Context, lifecycleOwner: LifecycleOwner, val liveCollections: LiveData<List<Collection>>) : Component(context, lifecycleOwner) {
     // Data
-    val itemIds
-        get() = liveItemIds.value ?: emptyList()
+    val collections
+        get() = liveCollections.value ?: emptyList()
 
     // Properties
-    var onCardClickedListener: ItemCardComponent.OnClickedListener? = null
+    var onCardClickedListener: CollectionCardComponent.OnClickedListener? = null
 
     // View
     private val recyclerView = RecyclerView(context).apply {
         adapter = object : RecyclerView.Adapter<ViewHolder>() {
-            init { liveItemIds.observe(lifecycleOwner) { notifyDataSetChanged() } }
-            override fun getItemCount(): Int = itemIds.size
+            init { liveCollections.observe(lifecycleOwner) { notifyDataSetChanged() } }
+            override fun getItemCount(): Int = collections.size
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-                val liveItemId = MutableLiveData<Long>()
-                val component = ItemCardComponent(context, lifecycleOwner, liveItemId)
+                val liveCollection = MutableLiveData<Collection>()
+                val component = CollectionCardComponent(context, lifecycleOwner, liveCollection)
                 component.onCardClickedListener = onCardClickedListenerProxy
-                return ViewHolder(component.view, liveItemId)
+                return ViewHolder(component.view, liveCollection)
             }
             override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-                holder.liveItemId.value = itemIds[position]
+                holder.liveCollection.value = collections[position]
             }
         }
         layoutManager = StaggeredGridLayoutManager(2, VERTICAL)
@@ -42,12 +43,12 @@ class ItemCardsComponent(context: Context, lifecycleOwner: LifecycleOwner, val l
         get() = recyclerView
 
     // Glue
-    private var onCardClickedListenerProxy = object : ItemCardComponent.OnClickedListener {
-        override fun onItemCardClicked(id: Long) {
-            onCardClickedListener?.onItemCardClicked(id)
+    private var onCardClickedListenerProxy = object : CollectionCardComponent.OnClickedListener {
+        override fun onCollectionCardClicked(id: Long) {
+            onCardClickedListener?.onCollectionCardClicked(id)
         }
     }
 
 
-    private class ViewHolder(view: View, val liveItemId: MutableLiveData<Long>) : RecyclerView.ViewHolder(view)
+    private class ViewHolder(view: View, val liveCollection: MutableLiveData<Collection>) : RecyclerView.ViewHolder(view)
 }

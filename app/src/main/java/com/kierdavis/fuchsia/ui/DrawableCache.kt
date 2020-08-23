@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.collection.LruCache
 
-class PictureDrawableCache(private val resolver: ContentResolver) : LruCache<Uri, Drawable>(256) {
+class DrawableCache(private val resolver: ContentResolver) : LruCache<Uri, Drawable>(256) {
     override fun create(uri: Uri): Drawable? =
         resolver.openInputStream(uri)?.use { stream ->
             Drawable.createFromStream(stream, uri.toString())
@@ -14,16 +14,14 @@ class PictureDrawableCache(private val resolver: ContentResolver) : LruCache<Uri
 
     companion object {
         @Volatile
-        private var theInstance: PictureDrawableCache? = null
+        private var theInstance: DrawableCache? = null
 
-        fun getInstance(context: Context): PictureDrawableCache {
+        fun getInstance(context: Context): DrawableCache {
             return theInstance
                 ?: synchronized(this) {
-                PictureDrawableCache(context.contentResolver)
-                    .also {
-                    theInstance = it
+                    DrawableCache(context.contentResolver)
+                        .also { theInstance = it }
                 }
-            }
         }
     }
 }
