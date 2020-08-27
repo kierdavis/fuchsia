@@ -13,7 +13,9 @@ import androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.observe
+import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.model.ItemPicture
+import kotlin.math.roundToInt
 
 class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner, livePicture: LiveData<ItemPicture>?) :
     Component(context, lifecycleOwner) {
@@ -84,7 +86,8 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
                 bottomToBottom = PARENT_ID
                 startToStart = PARENT_ID
                 endToEnd = PARENT_ID
-                setMargins(16, 16, 16, 16)
+                val margin = context.resources.getDimension(R.dimen.add_item_picture_button_margin).roundToInt()
+                setMargins(margin, margin, margin, margin)
             })
         }
         override val view: View
