@@ -28,6 +28,7 @@ class ItemEditorComponent(context: Context, lifecycleOwner: LifecycleOwner, val 
 
     // View
     private val nameView = EditText(context).apply {
+        id = View.generateViewId()
         hint = "Name"
         inputType = TYPE_CLASS_TEXT or TYPE_TEXT_VARIATION_SHORT_MESSAGE or TYPE_TEXT_FLAG_CAP_SENTENCES
         isSingleLine = true
@@ -49,7 +50,7 @@ class ItemEditorComponent(context: Context, lifecycleOwner: LifecycleOwner, val 
             endToEnd = PARENT_ID
         })
         addView(picturesComponent.view, ConstraintLayout.LayoutParams(MATCH_CONSTRAINT, WRAP_CONTENT).apply {
-            topToTop = PARENT_ID
+            topToBottom = nameView.id
             startToStart = PARENT_ID
             endToEnd = PARENT_ID
         })
