@@ -1,9 +1,7 @@
 package com.kierdavis.fuchsia.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import com.kierdavis.fuchsia.ui.component.Component
 
@@ -19,5 +17,17 @@ abstract class ComponentFragment<C: Component> : Fragment() {
     ): View? {
         component = onCreateComponent()
         return component.view
+    }
+
+    open val menuRes: Int? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(menuRes != null)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        menuRes?.let { inflater.inflate(it, menu) }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }

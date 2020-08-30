@@ -1,10 +1,7 @@
 package com.kierdavis.fuchsia.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import com.kierdavis.fuchsia.model.Item
 
 @Dao
@@ -14,6 +11,9 @@ abstract class ItemDao {
 
     @Update
     abstract suspend fun update(item: Item)
+
+    @Delete
+    abstract suspend fun delete(item: Item)
 
     @Query("SELECT id FROM Item")
     abstract fun allIds(): LiveData<List<Long>>
