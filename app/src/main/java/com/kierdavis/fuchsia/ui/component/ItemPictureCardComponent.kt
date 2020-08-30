@@ -33,18 +33,10 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
     }
     private val cardView = CardView(context).apply {
         radius = 10F
-        addView(contents.view, ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))
-    }
-    private val layout = ConstraintLayout(context).apply {
-        addView(cardView, ConstraintLayout.LayoutParams(MATCH_CONSTRAINT, WRAP_CONTENT).apply {
-            topToTop = PARENT_ID
-            startToStart = PARENT_ID
-            endToEnd = PARENT_ID
-            dimensionRatio = "1:1"
-        })
+        addView(contents.view, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
     }
     override val view: View
-        get() = layout
+        get() = cardView
 
 
     private class PictureContents(context: Context, lifecycleOwner: LifecycleOwner, livePicture: LiveData<ItemPicture>) :
@@ -59,9 +51,9 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
         private val layout = ConstraintLayout(context).apply {
             addView(imageView, ConstraintLayout.LayoutParams(MATCH_CONSTRAINT, MATCH_CONSTRAINT).apply {
                 topToTop = PARENT_ID
-                bottomToBottom = PARENT_ID
                 startToStart = PARENT_ID
                 endToEnd = PARENT_ID
+                dimensionRatio = "1:1"
             })
         }
         override val view: View
@@ -83,9 +75,9 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
         private val layout = ConstraintLayout(context).apply {
             addView(imageView, ConstraintLayout.LayoutParams(MATCH_CONSTRAINT, MATCH_CONSTRAINT).apply {
                 topToTop = PARENT_ID
-                bottomToBottom = PARENT_ID
                 startToStart = PARENT_ID
                 endToEnd = PARENT_ID
+                dimensionRatio = "1:1"
                 val margin = context.resources.getDimension(R.dimen.add_item_picture_button_margin).roundToInt()
                 setMargins(margin, margin, margin, margin)
             })

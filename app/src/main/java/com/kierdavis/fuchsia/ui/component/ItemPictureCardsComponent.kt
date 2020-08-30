@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kierdavis.fuchsia.model.ItemPicture
+import com.kierdavis.fuchsia.ui.PaddingDecoration
 
 class ItemPictureCardsComponent(context: Context, lifecycleOwner: LifecycleOwner, val livePictures: LiveData<List<ItemPicture>>) :
     Component(context, lifecycleOwner) {
@@ -43,6 +45,8 @@ class ItemPictureCardsComponent(context: Context, lifecycleOwner: LifecycleOwner
                 holder.livePicture?.apply { value = pictures[position] }
             }
         }
+        layoutManager = GridLayoutManager(context, 3)
+        addItemDecoration(PaddingDecoration(10))
     }
     override val view: View
         get() = recyclerView
