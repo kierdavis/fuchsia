@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kierdavis.fuchsia.model.ItemPicture
@@ -24,6 +25,7 @@ class ItemPictureCardsComponent(context: Context, lifecycleOwner: LifecycleOwner
     // View
     private val recyclerView = RecyclerView(context).apply {
         adapter = object : RecyclerView.Adapter<ViewHolder>() {
+            init { livePictures.observe(lifecycleOwner) { notifyDataSetChanged() } }
             override fun getItemCount(): Int = pictures.size + 1
             override fun getItemViewType(position: Int): Int =
                 if (position < pictures.size) {
