@@ -83,7 +83,7 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
                 startToStart = PARENT_ID
                 endToEnd = PARENT_ID
                 dimensionRatio = "1:1"
-                val margin = context.resources.getDimension(R.dimen.edititem_add_picture_button_margin).roundToInt()
+                val margin = context.resources.getDimension(R.dimen.add_item_picture_button_margin).roundToInt()
                 setMargins(margin, margin, margin, margin)
             })
         }

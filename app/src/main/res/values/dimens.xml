@@ -4,5 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="fab_margin">24dp</dimen>
-    <dimen name="edititem_add_picture_button_margin">16dp</dimen>
+    <dimen name="primary_card_text_padding">8dp</dimen>
+    <dimen name="add_item_picture_button_margin">16dp</dimen>
 </resources>

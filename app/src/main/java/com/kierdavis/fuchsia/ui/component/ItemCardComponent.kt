@@ -13,6 +13,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
 import com.kierdavis.fuchsia.MyTransformations
+import com.kierdavis.fuchsia.R
+import kotlin.math.roundToInt
 
 class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner, val liveItemId: LiveData<Long>) : Component(context, lifecycleOwner) {
     // Data
@@ -28,6 +30,8 @@ class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner, val li
     private val textView = TextView(context).apply {
         id = View.generateViewId()
         liveItem.observe(lifecycleOwner) { text = it.name }
+        val padding = context.resources.getDimension(R.dimen.primary_card_text_padding).roundToInt()
+        setPadding(padding, padding, padding, padding)
     }
     private val imageView = ImageView(context).apply {
         id = View.generateViewId()

@@ -11,7 +11,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.observe
+import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.model.Collection
+import kotlin.math.roundToInt
 
 class CollectionCardComponent(context: Context, lifecycleOwner: LifecycleOwner, val liveCollection: LiveData<Collection>) : Component(context, lifecycleOwner) {
     // Data
@@ -33,7 +35,10 @@ class CollectionCardComponent(context: Context, lifecycleOwner: LifecycleOwner, 
         id = View.generateViewId()
         radius = 15F
         cardElevation = 3F
-        addView(textView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        addView(textView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+            val padding = context.resources.getDimension(R.dimen.primary_card_text_padding).roundToInt()
+            setPadding(padding, padding, padding, padding)
+        })
         setOnClickListener { onCardClickedListener?.onCollectionCardClicked(collectionId) }
     }
     override val view: View
