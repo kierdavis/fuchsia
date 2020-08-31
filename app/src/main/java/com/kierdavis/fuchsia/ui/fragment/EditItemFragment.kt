@@ -18,6 +18,7 @@ import com.kierdavis.fuchsia.ui.component.ItemPictureCardComponent
 import kotlinx.coroutines.launch
 
 class EditItemFragment : ComponentFragment<ItemEditorComponent>(), ItemPictureCardComponent.OnAddButtonClickedListener {
+
     private val args: EditItemFragmentArgs by navArgs()
     private val viewModel by viewModels<Model> {
         Model.Factory(requireContext(), args.id)

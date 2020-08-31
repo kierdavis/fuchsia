@@ -14,12 +14,10 @@ import com.kierdavis.fuchsia.ui.component.ItemCardComponent
 import kotlinx.coroutines.launch
 
 class EditCollectionFragment : ComponentFragment<CollectionEditorComponent>(), ItemCardComponent.OnClickedListener {
+
     private val args: EditCollectionFragmentArgs by navArgs()
     private val viewModel by viewModels<Model> {
-        Model.Factory(
-            requireContext(),
-            args.id
-        )
+        Model.Factory(requireContext(), args.id)
     }
 
     override fun onCreateComponent(): CollectionEditorComponent =
