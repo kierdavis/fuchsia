@@ -14,18 +14,26 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.kierdavis.fuchsia.R
 import kotlin.math.roundToInt
 
-class AllItemsComponent(context: Context, lifecycleOwner: LifecycleOwner) : Component(context, lifecycleOwner) {
+class AllItemsComponent(context: Context, lifecycleOwner: LifecycleOwner) :
+    Component(context, lifecycleOwner) {
+
     // Properties
     var onItemCardClickedListener
         get() = itemsComponent.onCardClickedListener
-        set(it) { itemsComponent.onCardClickedListener = it }
+        set(it) {
+            itemsComponent.onCardClickedListener = it
+        }
     var onAddButtonClickedListener: OnAddButtonClickedListener? = null
 
     // View
-    private val itemsComponent = ItemCardsComponent(context, lifecycleOwner, database.itemDao().allIds())
+    private val itemsComponent =
+        ItemCardsComponent(context, lifecycleOwner, database.itemDao().allIds())
     private val addButton = FloatingActionButton(context).apply {
         setImageResource(android.R.drawable.ic_input_add)
-        ImageViewCompat.setImageTintList(this, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.secondaryTextColor)))
+        ImageViewCompat.setImageTintList(
+            this,
+            ColorStateList.valueOf(ContextCompat.getColor(context, R.color.secondaryTextColor))
+        )
         size = FloatingActionButton.SIZE_AUTO
         isClickable = true
         isFocusable = true
