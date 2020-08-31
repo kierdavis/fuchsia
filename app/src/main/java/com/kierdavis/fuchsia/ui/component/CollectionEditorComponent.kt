@@ -2,8 +2,6 @@ package com.kierdavis.fuchsia.ui.component
 
 import android.content.Context
 import android.view.View
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.kierdavis.fuchsia.model.Collection
@@ -13,14 +11,14 @@ class CollectionEditorComponent(context: Context, lifecycleOwner: LifecycleOwner
 
     // Properties
     var onItemCardClickedListener
-        get() = coreComponent.onItemCardClickedListener
-        set(it) { coreComponent.onItemCardClickedListener = it }
+        get() = core.onItemCardClickedListener
+        set(it) { core.onItemCardClickedListener = it }
+    var onItemSelectedForAdditionListener
+        get() = selector.onSelectedListener
+        set(it) { selector.onSelectedListener = it }
 
     // View
-    private val coreComponent = CollectionEditorCoreComponent(context, lifecycleOwner, liveCollection)
-    private val layout = CoordinatorLayout(context).apply {
-        addView(coreComponent.view, CoordinatorLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
-    }
-    override val view: View
-        get() = layout
+    private val core = CollectionEditorCoreComponent(context, lifecycleOwner, liveCollection)
+    private val selector = CollectionItemSelectorComponent(context, lifecycleOwner)
+    override val view: View = selector.addTo(core)
 }

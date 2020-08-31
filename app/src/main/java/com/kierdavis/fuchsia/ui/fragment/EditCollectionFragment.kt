@@ -9,11 +9,14 @@ import androidx.navigation.fragment.navArgs
 import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.database.AppDatabase
 import com.kierdavis.fuchsia.model.Collection
+import com.kierdavis.fuchsia.model.CollectionItem
 import com.kierdavis.fuchsia.ui.component.CollectionEditorComponent
+import com.kierdavis.fuchsia.ui.component.CollectionItemSelectorComponent
 import com.kierdavis.fuchsia.ui.component.ItemCardComponent
 import kotlinx.coroutines.launch
 
-class EditCollectionFragment : ComponentFragment<CollectionEditorComponent>(), ItemCardComponent.OnClickedListener {
+class EditCollectionFragment : ComponentFragment<CollectionEditorComponent>(),
+    ItemCardComponent.OnClickedListener, CollectionItemSelectorComponent.OnSelectedListener {
 
     private val args: EditCollectionFragmentArgs by navArgs()
     private val viewModel by viewModels<Model> {
@@ -23,10 +26,15 @@ class EditCollectionFragment : ComponentFragment<CollectionEditorComponent>(), I
     override fun onCreateComponent(): CollectionEditorComponent =
         CollectionEditorComponent(requireContext(), viewLifecycleOwner, viewModel.liveCollection).apply {
             onItemCardClickedListener = this@EditCollectionFragment
+            onItemSelectedForAdditionListener = this@EditCollectionFragment
         }
 
     override fun onItemCardClicked(id: Long) {
         findNavController().navigate(EditCollectionFragmentDirections.actionEditCollectionToEditItem(id))
+    }
+
+    override fun onItemSelectedForAdditionToCollection(itemId: Long) {
+        viewModel.addItemToCollection(itemId)
     }
 
     override val menuRes = R.menu.editcollection
@@ -53,6 +61,12 @@ class EditCollectionFragment : ComponentFragment<CollectionEditorComponent>(), I
                 viewModelScope.launch {
                     database.collectionDao().update(it)
                 }
+            }
+        }
+
+        fun addItemToCollection(itemId: Long) {
+            viewModelScope.launch {
+                liveCollection.value?.let { database.collectionItemDao().insert(CollectionItem(it.id, itemId)) }
             }
         }
 

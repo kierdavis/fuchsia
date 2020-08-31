@@ -21,7 +21,7 @@ class CollectionEditorCoreComponent(context: Context, lifecycleOwner: LifecycleO
     Component(context, lifecycleOwner) {
 
     // Data
-    val liveItemIds = MyTransformations.flatten(lifecycleOwner, Transformations.map(liveCollection) { database.itemDao().idsInCollection(it.id) })
+    val liveItemIds = MyTransformations.flatten(lifecycleOwner, Transformations.map(liveCollection) { database.collectionItemDao().itemIdsInCollection(it.id) })
 
     // Properties
     var onItemCardClickedListener

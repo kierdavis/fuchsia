@@ -19,6 +19,9 @@ class ItemCardsComponent(context: Context, lifecycleOwner: LifecycleOwner, val l
 
     // Properties
     var onCardClickedListener: ItemCardComponent.OnClickedListener? = null
+    var layoutManager
+        get() = recyclerView.layoutManager
+        set(it) { recyclerView.layoutManager = it }
 
     // View
     private val recyclerView = RecyclerView(context).apply {

@@ -18,9 +18,6 @@ abstract class ItemDao {
     @Query("SELECT id FROM Item")
     abstract fun allIds(): LiveData<List<Long>>
 
-    @Query("SELECT itemId FROM CollectionItem WHERE collectionId = :collectionId")
-    abstract fun idsInCollection(collectionId: Long): LiveData<List<Long>>
-
     @Query("SELECT * FROM Item WHERE id = :id LIMIT 1")
     abstract fun byId(id: Long): LiveData<Item>
 }
