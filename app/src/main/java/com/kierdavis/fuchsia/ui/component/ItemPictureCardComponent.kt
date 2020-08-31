@@ -32,6 +32,7 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
         AddButtonContents(context, lifecycleOwner)
     }
     private val cardView = CardView(context).apply {
+        id = View.generateViewId()
         radius = 10F
         addView(contents.view, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
     }
@@ -44,11 +45,13 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
 
         // View
         private val imageView = ImageView(context).apply {
+            id = View.generateViewId()
             livePicture.observe(lifecycleOwner) {
                 setImageDrawable(drawableCache.get(it.mediaUri))
             }
         }
         private val layout = ConstraintLayout(context).apply {
+            id = View.generateViewId()
             addView(imageView, ConstraintLayout.LayoutParams(MATCH_CONSTRAINT, MATCH_CONSTRAINT).apply {
                 topToTop = PARENT_ID
                 startToStart = PARENT_ID
@@ -69,10 +72,12 @@ class ItemPictureCardComponent(context: Context, lifecycleOwner: LifecycleOwner,
 
         // View
         private val imageView = ImageView(context).apply {
+            id = View.generateViewId()
             setImageResource(android.R.drawable.ic_input_add)
             setOnClickListener { onAddButtonClickedListener?.onAddItemPictureButtonClicked() }
         }
         private val layout = ConstraintLayout(context).apply {
+            id = View.generateViewId()
             addView(imageView, ConstraintLayout.LayoutParams(MATCH_CONSTRAINT, MATCH_CONSTRAINT).apply {
                 topToTop = PARENT_ID
                 startToStart = PARENT_ID

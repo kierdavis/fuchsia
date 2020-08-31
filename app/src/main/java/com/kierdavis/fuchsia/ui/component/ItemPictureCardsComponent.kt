@@ -24,6 +24,7 @@ class ItemPictureCardsComponent(context: Context, lifecycleOwner: LifecycleOwner
 
     // View
     private val recyclerView = RecyclerView(context).apply {
+        id = View.generateViewId()
         adapter = object : RecyclerView.Adapter<ViewHolder>() {
             init { livePictures.observe(lifecycleOwner) { notifyDataSetChanged() } }
             override fun getItemCount(): Int = pictures.size + 1

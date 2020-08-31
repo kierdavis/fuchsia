@@ -26,9 +26,11 @@ class CollectionCardComponent(context: Context, lifecycleOwner: LifecycleOwner, 
 
     // View
     private val textView = TextView(context).apply {
+        id = View.generateViewId()
         liveName.observe(lifecycleOwner) { text = it }
     }
     private val cardView = CardView(context).apply {
+        id = View.generateViewId()
         radius = 15F
         cardElevation = 3F
         addView(textView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))

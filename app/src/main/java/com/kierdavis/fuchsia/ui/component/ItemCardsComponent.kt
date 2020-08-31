@@ -22,6 +22,7 @@ class ItemCardsComponent(context: Context, lifecycleOwner: LifecycleOwner, val l
 
     // View
     private val recyclerView = RecyclerView(context).apply {
+        id = View.generateViewId()
         adapter = object : RecyclerView.Adapter<ViewHolder>() {
             init { liveItemIds.observe(lifecycleOwner) { notifyDataSetChanged() } }
             override fun getItemCount(): Int = itemIds.size

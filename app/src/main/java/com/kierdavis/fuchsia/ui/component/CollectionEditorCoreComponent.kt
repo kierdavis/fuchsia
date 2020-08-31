@@ -46,6 +46,7 @@ class CollectionEditorCoreComponent(context: Context, lifecycleOwner: LifecycleO
     }
     private val itemsComponent = ItemCardsComponent(context, lifecycleOwner, liveItemIds)
     private val layout = ConstraintLayout(context).apply {
+        id = View.generateViewId()
         addView(nameView, ConstraintLayout.LayoutParams(MATCH_CONSTRAINT, WRAP_CONTENT).apply {
             topToTop = PARENT_ID
             startToStart = PARENT_ID

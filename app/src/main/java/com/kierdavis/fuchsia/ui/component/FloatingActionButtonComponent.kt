@@ -25,6 +25,7 @@ class FloatingActionButtonComponent(context: Context, lifecycleOwner: LifecycleO
 
     // View
     private val button = FloatingActionButton(context).apply {
+        id = View.generateViewId()
         ImageViewCompat.setImageTintList(
             this,
             ColorStateList.valueOf(ContextCompat.getColor(context, R.color.secondaryTextColor))
@@ -37,6 +38,7 @@ class FloatingActionButtonComponent(context: Context, lifecycleOwner: LifecycleO
         get() = button
     fun addTo(content: View): View =
         FrameLayout(context).apply {
+            id = View.generateViewId()
             addView(content, FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT))
             addView(button, FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
                 gravity = Gravity.END or Gravity.BOTTOM

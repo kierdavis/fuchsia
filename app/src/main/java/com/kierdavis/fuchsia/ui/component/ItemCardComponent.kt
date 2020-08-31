@@ -26,9 +26,11 @@ class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner, val li
 
     // View
     private val textView = TextView(context).apply {
+        id = View.generateViewId()
         liveItem.observe(lifecycleOwner) { text = it.name }
     }
     private val imageView = ImageView(context).apply {
+        id = View.generateViewId()
         adjustViewBounds = true
         liveFirstPicture.observe(lifecycleOwner) { firstPicture ->
             if (firstPicture != null) {
@@ -42,6 +44,7 @@ class ItemCardComponent(context: Context, lifecycleOwner: LifecycleOwner, val li
         }
     }
     private val cardView = CardView(context).apply {
+        id = View.generateViewId()
         radius = 15F
         cardElevation = 3F
         addView(textView, ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
