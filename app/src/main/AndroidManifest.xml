@@ -24,4 +24,8 @@
     </application>
 
     <!-- TODO auto thumbnails for collections -->
+    <!-- TODO support adding items to collections from the item editor page -->
+    <!-- TODO allow pictures to be cropped/edited before importing -->
+    <!-- TODO implement intent magic to allow you to share a photo to Fuchsia from another app and seed creation of a new item -->
+    <!-- TODO allow items to be removed from collections -->
 </manifest>
