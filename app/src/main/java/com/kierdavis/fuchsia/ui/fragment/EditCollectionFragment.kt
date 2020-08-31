@@ -1,10 +1,12 @@
 package com.kierdavis.fuchsia.ui.fragment
 
 import android.content.Context
+import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.kierdavis.fuchsia.R
 import com.kierdavis.fuchsia.database.AppDatabase
 import com.kierdavis.fuchsia.model.Collection
 import com.kierdavis.fuchsia.ui.component.CollectionEditorComponent
@@ -29,12 +31,23 @@ class EditCollectionFragment : ComponentFragment<CollectionEditorComponent>(), I
         findNavController().navigate(EditCollectionFragmentDirections.actionEditCollectionToEditItem(id))
     }
 
+    override val menuRes = R.menu.editcollection
+    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean =
+        when (menuItem.itemId) {
+            R.id.menuitem_editcollection_delete -> { onDeleteCollectionClicked(); true }
+            else -> super.onOptionsItemSelected(menuItem)
+        }
+    private fun onDeleteCollectionClicked() {
+        viewModel.deleteCollection()
+        findNavController().navigateUp()
+    }
+
 
     private class Model(context: Context, collectionId: Long) : ViewModel() {
+        private val database = AppDatabase.getInstance(context)
         val liveCollection = MutableLiveData<Collection>()
 
         init {
-            val database = AppDatabase.getInstance(context)
             Transformations.distinctUntilChanged(database.collectionDao().byId(collectionId)).observeForever {
                 liveCollection.value = it
             }
@@ -42,6 +55,12 @@ class EditCollectionFragment : ComponentFragment<CollectionEditorComponent>(), I
                 viewModelScope.launch {
                     database.collectionDao().update(it)
                 }
+            }
+        }
+
+        fun deleteCollection() {
+            viewModelScope.launch {
+                liveCollection.value?.let { database.collectionDao().delete(it) }
             }
         }
 
