@@ -7,19 +7,18 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.kierdavis.fuchsia.model.Item
-import com.kierdavis.fuchsia.model.ItemPicture
 import com.kierdavis.fuchsia.database.converters.UriConverters
+import com.kierdavis.fuchsia.model.*
 import com.kierdavis.fuchsia.model.Collection
-import com.kierdavis.fuchsia.model.CollectionItem
 
-@Database(entities = [Item::class, ItemPicture::class, Collection::class, CollectionItem::class], version = 3)
+@Database(entities = [Item::class, ItemPicture::class, Collection::class, CollectionItem::class, TemporaryMediaUri::class], version = 4)
 @TypeConverters(UriConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
     abstract fun itemPictureDao(): ItemPictureDao
     abstract fun collectionDao(): CollectionDao
     abstract fun collectionItemDao(): CollectionItemDao
+    abstract fun temporaryMediaUriDao(): TemporaryMediaUriDao
 
     companion object {
         @Volatile
@@ -41,6 +40,11 @@ abstract class AppDatabase : RoomDatabase() {
                 object : Migration(2, 3) {
                     override fun migrate(database: SupportSQLiteDatabase) {
                         database.execSQL("CREATE TABLE IF NOT EXISTS `CollectionItem` (`collectionId` INTEGER NOT NULL, `itemId` INTEGER NOT NULL, PRIMARY KEY(`collectionId`, `itemId`))")
+                    }
+                },
+                object : Migration(3, 4) {
+                    override fun migrate(database: SupportSQLiteDatabase) {
+                        database.execSQL("CREATE TABLE IF NOT EXISTS `TemporaryMediaUri` (`uri` TEXT NOT NULL, PRIMARY KEY(`uri`))")
                     }
                 }
             ).build()

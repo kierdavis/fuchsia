@@ -4,21 +4,21 @@ import android.content.Context
 import android.net.Uri
 import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.kierdavis.fuchsia.R
+import com.kierdavis.fuchsia.TemporaryMediaUriManager
 import com.kierdavis.fuchsia.database.AppDatabase
 import com.kierdavis.fuchsia.model.Item
 import com.kierdavis.fuchsia.model.ItemPicture
-import com.kierdavis.fuchsia.ui.PictureCapture
 import com.kierdavis.fuchsia.ui.component.ItemEditorComponent
 import com.kierdavis.fuchsia.ui.component.ItemPictureCardComponent
 import kotlinx.coroutines.launch
 
 class EditItemFragment : ComponentFragment<ItemEditorComponent>(), ItemPictureCardComponent.OnAddButtonClickedListener {
-
     private val args: EditItemFragmentArgs by navArgs()
     private val viewModel by viewModels<Model> {
         Model.Factory(requireContext(), args.id)
@@ -29,18 +29,25 @@ class EditItemFragment : ComponentFragment<ItemEditorComponent>(), ItemPictureCa
             onAddPictureButtonClickedListener = this@EditItemFragment
         }
 
-    private val takePicture =
-        registerForActivityResult(ActivityResultContracts.TakePicture()) { onAddItemPictureResult() }
     override fun onAddItemPictureButtonClicked() {
-        // TODO support importing existing photo from media library
-        PictureCapture.launch(
-            requireActivity(),
-            viewModel.liveItem.value?.name ?: "untitled-item",
-            takePicture
-        )
+        AlertDialog.Builder(requireContext()).apply {
+            // setMessage("Foobar:")
+            setCancelable(true)
+            // It doesn't make much sense to call these "positive" and "negative" buttons, but
+            // AlertDialog.Builder only allows one button of each type.
+            setPositiveButton("Take picture using camera") { _, _ ->
+                viewModel.getMediaUriForCapture().observe(viewLifecycleOwner) { capturePicture.launch(it) }
+            }
+            setNegativeButton("Select picture from library") { _, _ ->
+                getPicture.launch("image/*")
+            }
+        }.create().show()
     }
-    private fun onAddItemPictureResult() {
-        PictureCapture.finish(requireActivity())?.let { mediaUri -> viewModel.addPicture(mediaUri) }
+    private val capturePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        viewModel.addCapturedPicture()
+    }
+    private val getPicture = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { mediaUris ->
+        viewModel.importPictures(mediaUris)
     }
 
     override val menuRes = R.menu.edititem
@@ -55,9 +62,9 @@ class EditItemFragment : ComponentFragment<ItemEditorComponent>(), ItemPictureCa
     }
 
 
-
-    private class Model(context: Context, val itemId: Long) : ViewModel() {
-        private val database = AppDatabase.getInstance(context)
+    private class Model(private val context: Context, val itemId: Long) : ViewModel() {
+        private val database
+            get() = AppDatabase.getInstance(context)
         val liveItem = MutableLiveData<Item>()
 
         init {
@@ -71,10 +78,35 @@ class EditItemFragment : ComponentFragment<ItemEditorComponent>(), ItemPictureCa
             }
         }
 
-        fun addPicture(mediaUri: Uri) {
-            val picture = ItemPicture(itemId = itemId, mediaUri = mediaUri)
+        fun getMediaUriForCapture(): LiveData<Uri> {
+            val result = MutableLiveData<Uri>()
             viewModelScope.launch {
-                database.itemPictureDao().insert(picture)
+                TemporaryMediaUriManager.prune(context)
+                result.postValue(TemporaryMediaUriManager.create(context))
+            }
+            return result
+        }
+
+        fun addCapturedPicture() {
+            viewModelScope.launch {
+                val mediaUri = TemporaryMediaUriManager.makePermanent(context) ?: return@launch
+                database.itemPictureDao().insert(ItemPicture(itemId = itemId, mediaUri = mediaUri))
+            }
+        }
+
+        fun importPictures(externalMediaUris: List<Uri>) {
+            viewModelScope.launch {
+                externalMediaUris.forEach { externalMediaUri ->
+                    TemporaryMediaUriManager.prune(context)
+                    val internalMediaUri = TemporaryMediaUriManager.create(context) ?: return@forEach
+                    (context.contentResolver.openInputStream(externalMediaUri) ?: return@forEach).use { inputStream ->
+                        (context.contentResolver.openOutputStream(internalMediaUri) ?: return@forEach).use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                    }
+                    TemporaryMediaUriManager.makePermanent(context, internalMediaUri) ?: return@forEach
+                    database.itemPictureDao().insert(ItemPicture(itemId = itemId, mediaUri = internalMediaUri))
+                }
             }
         }
 
